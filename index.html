@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electric Vehicle Revenue Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            padding: 20px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        th {
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 18px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:hover {
+            background: #f8f9ff;
+            transition: background 0.3s ease;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .source-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            word-break: break-word;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .source-link:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+
+        .findings {
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 5px 0;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .key-finding {
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .value-item {
+            margin: 8px 0;
+            padding-left: 10px;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            th, td {
+                padding: 12px;
+                font-size: 0.95em;
+            }
+
+            .section-title {
+                font-size: 1.4em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EnerFleet</h1>
+            <p>Smart Charging & V2G Services Revenue Potential</p>
+        </header>
+
+        <div class="content">
+            <!-- Smart Charging Revenue Section -->
+            <div class="section">
+                <div class="section-title">💰 Smart Charging Revenue</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Key Findings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="https://www.bosch.com/stories/smart-charging/" target="_blank" class="source-link">
+                                    Bosch - Smart Charging
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="highlight">
+                                    <strong>€246,000 + €15,858 per year savings</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="https://www.preprints.org/manuscript/202605.0001" target="_blank" class="source-link">
+                                    Preprints.org Research
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="highlight">
+                                    Reduce overall cost by <strong>around 74%</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="https://www.sciencedirect.com/science/article/abs/pii/S2352152X24033516" target="_blank" class="source-link">
+                                    ScienceDirect - Levelized Cost Analysis
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="highlight">
+                                    Decreases the Levelized Cost of Energy from <strong>€0.530 to €0.314 per kW</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="https://www.sciencedirect.com/science/article/abs/pii/S1361920919306340?utm_source=chatgpt.com" target="_blank" class="source-link">
+                                    ScienceDirect - Cost Savings Study
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="highlight">
+                                    <strong>34% to 43% savings</strong>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- V2G Services Revenue Section -->
+            <div class="section">
+                <div class="section-title">🔋 V2G Services Revenue</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Key Findings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="https://www.mckinsey.com.br/industries/automotive-and-assembly/our-insights/what-promise-does-v2x-hold-for-fleets" target="_blank" class="source-link">
+                                    McKinsey - V2X Promise for Fleets
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="key-finding">Key Finding</div>
+                                <div class="value-item">• Georgia: <strong>$1,000–$2,000 per EV annually</strong></div>
+                                <div class="value-item">• Virginia: <strong>$15,000–$16,000 per EV annually</strong></div>
+                                <div style="margin-top: 10px; font-style: italic; color: #666;">
+                                    McKinsey states that V2X value pools can vary by more than 10x depending on utility and ISO market structures.
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="https://arxiv.org/abs/2202.08026" target="_blank" class="source-link">
+                                    Frequency Response from Aggregated V2G Chargers
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="highlight">
+                                    <div class="key-finding">Annual Value</div>
+                                    <div class="value-item">• Approximately <strong>£6,300 annual value per charger</strong></div>
+                                    <div class="value-item">• Equivalent to roughly <strong>$8,000+ per year</strong></div>
+                                    <div style="margin-top: 10px; color: #666;">
+                                        Study analyzed over 25,000 chargers, demonstrating that V2G assets providing frequency response services create substantial economic value.
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="https://www.mckinsey.com.br/industries/automotive-and-assembly/our-insights/what-promise-does-v2x-hold-for-fleets" target="_blank" class="source-link">
+                                    McKinsey - School Bus V2G Analysis
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="key-finding">School Buses as High-Value V2G Assets</div>
+                                <div style="margin-bottom: 10px;"><strong>Reasons:</strong></div>
+                                <div class="value-item">• Large battery capacity</div>
+                                <div class="value-item">• Predictable schedules</div>
+                                <div class="value-item">• Long idle periods</div>
+                                <div class="value-item">• Availability during grid peak demand</div>
+                                <div class="highlight" style="margin-top: 15px;">
+                                    <strong>Potential annual value: $1,000–$16,000 per vehicle</strong> depending on market location
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="https://fleetrabbit.com/blogs/post/vehicle-to-grid-v2g-fleet-management" target="_blank" class="source-link">
+                                    FleetRabbit - V2G Fleet Management
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="key-finding">Revenue Potential</div>
+                                <div class="highlight">
+                                    <div class="value-item">• <strong>$1,000–$5,000 annual revenue per EV</strong></div>
+                                    <div class="value-item">• Additional <strong>10–25% reduction</strong> in peak-demand costs</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="https://www.chargepoint.com/blog/why-electric-school-bus-fleets-can-look-beyond-bidirectional-charging?srsltid=AfmBOooUl_5UGYFeRyDusim9DWUYHDJGjcAlfw1R_IrVWHVJBC14pmWv" target="_blank" class="source-link">
+                                    ChargePoint - Electric School Bus Fleets
+                                </a>
+                            </td>
+                            <td class="findings">
+                                <div class="highlight">
+                                    <strong>V2G Service Income: $5,000 to $10,000</strong>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 EnerFleet | Data compiled from various industry sources</p>
+        </footer>
+    </div>
+</body>
+</html>
