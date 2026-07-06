@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 8px;
@@ -100,6 +100,34 @@
             color: #1e40af;
         }
 
+        .takeaways {
+            color: #334155;
+        }
+
+        .takeaways ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .takeaways li {
+            position: relative;
+            padding-left: 18px;
+        }
+
+        .takeaways li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .takeaways li + li {
+            margin-top: 6px;
+        }
+
         .table-wrapper {
             overflow-x: auto;
         }
@@ -155,26 +183,55 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 35%;">Source</th>
+                            <th style="width: 30%;">Source</th>
                             <th>Findings</th>
+                            <th>Practical Takeaways</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><a href="https://www.bosch.com/stories/smart-charging/" target="_blank" class="source-link">Smart Charging - intelligent electric vehicle charging: Bosch</a></td>
                             <td class="findings"><strong>€246,000 + €15,858/year savings</strong></td>
+                            <td class="takeaways">
+                                <ul>
+                                    <li>Smart charging automatically schedules charging during low-cost electricity periods.</li>
+                                    <li>Reduces peak demand charges and improves charger utilization.</li>
+                                    <li>Extends battery life by avoiding unnecessary fast charging and high SoC dwell times.</li>
+                                </ul>
+                            </td>
                         </tr>
                         <tr>
                             <td><a href="https://www.preprints.org/manuscript/202605.0001" target="_blank" class="source-link">Unlocking the Value of Public EV Chargers: A Data-Driven Case Study from Gothenburg, Sweden</a></td>
                             <td class="findings">Reduce overall cost by <strong>~74%</strong></td>
+                            <td class="takeaways">
+                                <ul>
+                                    <li>Real-world charging session data was used to optimize charging schedules.</li>
+                                    <li>Smart charging and V2G significantly increase charger utilization and grid flexibility.</li>
+                                    <li>Dynamic scheduling shifts charging to periods with lower electricity prices and higher renewable generation.</li>
+                                </ul>
+                            </td>
                         </tr>
                         <tr>
                             <td><a href="https://www.sciencedirect.com/science/article/abs/pii/S2352152X24033516" target="_blank" class="source-link">Commercial EV fleet smart charging for cost reduction and renewables integration: A case study in Germany</a></td>
                             <td class="findings">Levelized Cost of Energy: <strong>€0.530 → €0.314/kW</strong></td>
+                            <td class="takeaways">
+                                <ul>
+                                    <li>Real-Time Pricing (RTP) enables charging when electricity prices are lowest.</li>
+                                    <li>Smart charging further reduced LCOE to €0.283/kWh by minimizing peak demand.</li>
+                                    <li>Integrating solar PV maximized renewable energy use while reducing operational costs.</li>
+                                </ul>
+                            </td>
                         </tr>
                         <tr>
                             <td><a href="https://www.sciencedirect.com/science/article/abs/pii/S1361920919306340" target="_blank" class="source-link">Smart charging management for shared autonomous electric vehicle fleets: A Puget Sound case study</a></td>
                             <td class="findings"><strong>34-43% savings</strong></td>
+                            <td class="takeaways">
+                                <ul>
+                                    <li>Smart charging increased photovoltaic self-consumption to 99%.</li>
+                                    <li>Long-range EVs provided greater flexibility for optimized charging.</li>
+                                    <li>Coordinated charging reduced fleet energy costs while maintaining vehicle availability.</li>
+                                </ul>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -183,38 +240,75 @@
             <!-- V2G Services Revenue Section -->
             <div class="section">
                 <div class="section-title">V2G Services Revenue</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 35%;">Source</th>
-                            <th>Findings</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="https://www.mckinsey.com.br/industries/automotive-and-assembly/our-insights/what-promise-does-v2x-hold-for-fleets" target="_blank" class="source-link">McKinsey Report : What promise does V2X hold for fleets?</a></td>
-                            <td class="findings">Georgia: <strong>$1,000-$2,000/EV/year</strong><br>Virginia: <strong>$15,000-$16,000/EV/year</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="https://arxiv.org/pdf/2202.08026" target="_blank" class="source-link">Frequency Response from Aggregated V2G
+                <div class="table-wrapper">
+                    <table class="wide-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 28%;">Source</th>
+                                <th style="width: 22%;">Findings</th>
+                                <th style="width: 50%;">Key Insights on Revenue Drivers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="https://www.mckinsey.com.br/industries/automotive-and-assembly/our-insights/what-promise-does-v2x-hold-for-fleets" target="_blank" class="source-link">McKinsey Report : What promise does V2X hold for fleets?</a></td>
+                                <td class="findings">Georgia: <strong>$1,000-$2,000/EV/year</strong><br>Virginia: <strong>$15,000-$16,000/EV/year</strong></td>
+                                <td class="takeaways">
+                                    <ul>
+                                        <li>Revenue varies significantly by electricity market design and grid-service compensation.</li>
+                                        <li>Highest earnings occur where fleets can participate in capacity, demand response, and ancillary service markets.</li>
+                                        <li>Fleet scale and vehicle availability directly impact revenue potential.</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://arxiv.org/pdf/2202.08026" target="_blank" class="source-link">Frequency Response from Aggregated V2G
 Chargers With Uncertain EV Connections</a></td>
-                            <td class="findings">Frequency response: <strong>£6,300/charger/year (~$8,000+)</strong></td>
-                        </tr>
-                        
-                        <tr>
-                            <td><a href="https://fleetrabbit.com/blogs/post/vehicle-to-grid-v2g-fleet-management" target="_blank" class="source-link">Vehicle-to-Grid (V2G) Fleet Management | EV Energy Revenue by FleetRabbit</a></td>
-                            <td class="findings"><strong>$1,000-$5,000/EV/year</strong> + 10-25% reduction in peak costs</td>
-                        </tr>
-                        <tr>
-                            <td><a href="https://www.chargepoint.com/blog/why-electric-school-bus-fleets-can-look-beyond-bidirectional-charging?srsltid=AfmBOooUl_5UGYFeRyDusim9DWUYHDJGjcAlfw1R_IrVWHVJBC14pmWv" target="_blank" class="source-link">ChargePoint : Why electric school bus fleets can look beyond bidirectional charging </a></td>
-                            <td class="findings"><strong>$5,000-$10,000 income</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="https://bosch.sharepoint.com/sites/msteams_6508251/Shared%20Documents/MarketReport%20BBM/20260520_Report_IEA_Global_EV_Outlook_2026.pdf?xsdata=MDV8MDJ8fDZkNzQ4MGFjMGJjMTRkMjQ4ZTRiMDhkZWQyODk5OGFhfDBhZTUxZTE5MDdjODRlNGJiYjZkNjQ4ZWU1ODQxMGY0fDB8MHw2MzkxNzk2ODU1NDY4NTYwMTF8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKRFFTSTZJbFJsWVcxelgwRlVVRk5sY25acFkyVmZVMUJQVEU5R0lpd2lWaUk2SWpBdU1DNHdNREF3SWl3aVVDSTZJbGRwYmpNeUlpd2lRVTRpT2lKUGRHaGxjaUlzSWxkVUlqb3hNWDA9fDF8TDJOb1lYUnpMekU1T2prM05HWTVOVEV6TFdaak1ESXRORGMzT0MwNE9UVTRMV1F6TkRGbE5XSm1ORE14TWw4d04yUXdZall6TWkwNU1tRm1MVFJsTVRBdE9HSmpNQzB3WkRjeE56Z3lZMll3WXpKQWRXNXhMbWRpYkM1emNHRmpaWE12YldWemMyRm5aWE12TVRjNE1qTTNNVGMxTXpBd09RPT18YTZlODQwYTQ5NGE2NDQ5NzhlNGIwOGRlZDI4OTk4YWF8N2ViN2FjNmM2OTZmNGQzYjk2ZWU1MjZkZmFjZjAzNzQ%3D&sdata=THBwdDFHY3QxSjZkUHY0NVBNaGF4K296QnIxYmZMNnlYRGRSeCt5UU8rYz0%3D&ovuser=0ae51e19-07c8-4e4b-bb6d-648ee58410f4%2Clpd5kor%40bosch.com" target="_blank" class="source-link">Global EV Outlook 2026</a></td>
-                            <td class="findings"><strong>$1,000 saving from V2G services : International Energy Agency</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
+                                <td class="findings">Frequency response: <strong>£6,300/charger/year (~$8,000+)</strong></td>
+                                <td class="takeaways">
+                                    <ul>
+                                        <li>Frequency regulation is one of the highest-value V2G services.</li>
+                                        <li>Aggregated EV batteries can respond within seconds to grid frequency deviations.</li>
+                                        <li>Revenue is earned primarily through grid stabilization and reserve market participation.</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://fleetrabbit.com/blogs/post/vehicle-to-grid-v2g-fleet-management" target="_blank" class="source-link">Vehicle-to-Grid (V2G) Fleet Management | EV Energy Revenue by FleetRabbit</a></td>
+                                <td class="findings"><strong>$1,000-$5,000/EV/year</strong> + 10-25% reduction in peak costs</td>
+                                <td class="takeaways">
+                                    <ul>
+                                        <li>EV batteries act as distributed energy assets when parked.</li>
+                                        <li>Revenue comes from exporting energy and providing grid services.</li>
+                                        <li>Additional savings are achieved by reducing demand charges during peak periods.</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.chargepoint.com/blog/why-electric-school-bus-fleets-can-look-beyond-bidirectional-charging?srsltid=AfmBOooUl_5UGYFeRyDusim9DWUYHDJGjcAlfw1R_IrVWHVJBC14pmWv" target="_blank" class="source-link">ChargePoint : Why electric school bus fleets can look beyond bidirectional charging </a></td>
+                                <td class="findings"><strong>$5,000-$10,000 income</strong></td>
+                                <td class="takeaways">
+                                    <ul>
+                                        <li>School buses have predictable schedules and long idle periods, making them ideal for V2G participation.</li>
+                                        <li>Revenue is generated through peak shaving, backup power, and grid-support programs.</li>
+                                        <li>Fleet operators can create a new income stream without affecting transportation operations.</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://bosch.sharepoint.com/sites/msteams_6508251/Shared%20Documents/MarketReport%20BBM/20260520_Report_IEA_Global_EV_Outlook_2026.pdf?xsdata=MDV8MDJ8fDZkNzQ4MGFjMGJjMTRkMjQ4ZTRiMDhkZWQyODk5OGFhfDBhZTUxZTE5MDdjODRlNGJiYjZkNjQ4ZWU1ODQxMGY0fDB8MHw2MzkxNzk2ODU1NDY4NTYwMTF8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKRFFTSTZJbFJsWVcxelgwRlVVRk5sY25acFkyVmZVMUJQVEU5R0lpd2lWaUk2SWpBdU1DNHdNREF3SWl3aVVDSTZJbGRwYmpNeUlpd2lRVTRpT2lKUGRHaGxjaUlzSWxkVUlqb3hNWDA9fDF8TDJOb1lYUnpMekU1T2prM05HWTVOVEV6TFdaak1ESXRORGMzT0MwNE9UVTRMV1F6TkRGbE5XSm1ORE14TWw4d04yUXdZall6TWkwNU1tRm1MVFJsTVRBdE9HSmpNQzB3WkRjeE56Z3lZMll3WXpKQWRXNXhMbWRpYkM1emNHRmpaWE12YldWemMyRm5aWE12TVRjNE1qTTNNVGMxTXpBd09RPT18YTZlODQwYTQ5NGE2NDQ5NzhlNGIwOGRlZDI4OTk4YWF8N2ViN2FjNmM2OTZmNGQzYjk2ZWU1MjZkZmFjZjAzNzQ%3D&sdata=THBwdDFHY3QxSjZkUHY0NVBNaGF4K296QnIxYmZMNnlYRGRSeCt5UU8rYz0%3D&ovuser=0ae51e19-07c8-4e4b-bb6d-648ee58410f4%2Clpd5kor%40bosch.com" target="_blank" class="source-link">Global EV Outlook 2026</a></td>
+                                <td class="findings"><strong>$1,000 saving from V2G services : International Energy Agency</strong></td>
+                                <td class="takeaways">
+                                    <ul>
+                                        <li>Smart charging and V2G help reduce total energy costs while supporting grid flexibility.</li>
+                                        <li>Benefits increase as renewable energy penetration grows.</li>
+                                        <li>Future electricity markets are expected to provide additional flexibility incentives.</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- V2G Pilot Programs & Economic Database Section -->
@@ -227,10 +321,10 @@ Chargers With Uncertain EV Connections</a></td>
                                 <th>Program</th>
                                 <th>OEM / Vehicle</th>
                                 <th>Fleet Size</th>
-                                <th>Revenue / Savings</th>
-                                <th>Revenue per Vehicle per Year</th>
                                 <th>Aggregator / Platform</th>
                                 <th>Utility / Market</th>
+                                <th>Revenue / Savings</th>
+                                <th>Revenue per Vehicle per Year</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -238,64 +332,64 @@ Chargers With Uncertain EV Connections</a></td>
                                 <td>Rhode Island Commercial V2G Pilot</td>
                                 <td>Nissan LEAF</td>
                                 <td>1 EV</td>
-                                <td class="findings"><strong>$4,280</strong> profit in 28 days + <strong>$222</strong> bill savings</td>
-                                <td class="findings"><strong>~$4,500+</strong> demonstrated in a single summer season</td>
                                 <td>Fermata Energy</td>
                                 <td>National Grid Connected Solutions</td>
+                                <td class="findings"><strong>$4,280</strong> profit in 28 days + <strong>$222</strong> bill savings</td>
+                                <td class="findings"><strong>~$4,500+</strong> demonstrated in a single summer season</td>
                             </tr>
                             <tr>
                                 <td>Fermata Vehicle-to-Building (V2B) Site</td>
                                 <td>Unknown EVs</td>
                                 <td>2 EVs</td>
-                                <td class="findings"><strong>$400/month</strong> bill savings</td>
-                                <td class="findings"><strong>~$2,400/vehicle/year</strong></td>
                                 <td>Fermata Energy</td>
                                 <td>Commercial Building</td>
+                                <td class="findings"><strong>$400/month</strong> bill savings</td>
+                                <td class="findings"><strong>~$2,400/vehicle/year</strong></td>
                             </tr>
                             <tr>
                                 <td>Highland Electric + National Grid School Bus Pilot</td>
                                 <td>Electric School Buses</td>
                                 <td>Pilot fleet</td>
-                                <td class="findings">Revenue not publicly disclosed; utility confirms buses provide grid services and revenue opportunities</td>
-                                <td class="findings">N/A</td>
                                 <td>Highland Electric</td>
                                 <td>National Grid (Massachusetts)</td>
+                                <td class="findings">Revenue not publicly disclosed; utility confirms buses provide grid services and revenue opportunities</td>
+                                <td class="findings">N/A</td>
                             </tr>
                             <tr>
                                 <td>White Plains School District V2G Pilot</td>
                                 <td>Lion Electric School Buses</td>
                                 <td>5 buses</td>
-                                <td class="findings">Pilot demonstrated V2G operation; revenue not disclosed</td>
-                                <td class="findings">Revenue not disclosed / N/A</td>
                                 <td>Nuvve</td>
                                 <td>Con Edison (NY)</td>
+                                <td class="findings">Pilot demonstrated V2G operation; revenue not disclosed</td>
+                                <td class="findings">Revenue not disclosed / N/A</td>
                             </tr>
                             <tr>
                                 <td>Nuvve School Bus Economic Model</td>
                                 <td>Blue Bird / School Buses</td>
                                 <td>61 buses</td>
-                                <td class="findings">Potential <strong>$4.4M</strong> lifetime revenue across fleet</td>
-                                <td class="findings"><strong>≈ $72,000</strong> lifetime per bus (~$6,000–7,000/year assuming 10–12 years)</td>
                                 <td>Nuvve GIVe Platform</td>
                                 <td>Utility Grid Services</td>
+                                <td class="findings">Potential <strong>$4.4M</strong> lifetime revenue across fleet</td>
+                                <td class="findings"><strong>≈ $72,000</strong> lifetime per bus (~$6,000–7,000/year assuming 10–12 years)</td>
                             </tr>
                             <tr>
                                 <td>McKinsey School Bus Market Analysis</td>
                                 <td>School Bus Fleets</td>
                                 <td>Market Analysis</td>
-                                <td class="findings">Annual V2X value highly location dependent</td>
-                                <td class="findings"><strong>$1,000–2,000/year</strong> in Georgia; <strong>$15,000–16,000/year</strong> in Virginia</td>
                                 <td>Various</td>
                                 <td>Various ISOs</td>
+                                <td class="findings">Annual V2X value highly location dependent</td>
+                                <td class="findings"><strong>$1,000–2,000/year</strong> in Georgia; <strong>$15,000–16,000/year</strong> in Virginia</td>
                             </tr>
                             <tr>
                                 <td>Project Sciurus</td>
                                 <td>Nissan LEAF</td>
                                 <td>325 EVs</td>
-                                <td class="findings">Up to <strong>£725</strong> annual savings/value achieved by the most flexible participants through V2G participation and ancillary service markets</td>
-                                <td class="findings"><strong>£725</strong> per vehicle per year (≈ US$900–950/year depending on exchange rate)</td>
                                 <td>OVO Energy + Kaluza + Indra</td>
                                 <td>National Grid ESO (Dynamic Containment and grid balancing services)</td>
+                                <td class="findings">Up to <strong>£725</strong> annual savings/value achieved by the most flexible participants through V2G participation and ancillary service markets</td>
+                                <td class="findings"><strong>£725</strong> per vehicle per year (≈ US$900–950/year depending on exchange rate)</td>
                             </tr>
                         </tbody>
                     </table>
