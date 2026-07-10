@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V2G Fleet Savings Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            padding: 30px;
+            border-right: 1px solid #dee2e6;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .content-area {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .form-group input[type="number"],
+        .form-group input[type="time"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .price-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-input-group label {
+            font-size: 0.75em;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .price-input-group input {
+            padding: 6px;
+            font-size: 0.85em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .summary-card.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .summary-card.red {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        .summary-card.blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .summary-card h4 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .summary-card .subtext {
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .chart-container h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .day-selector {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .day-selector label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .day-selector select {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .export-btn {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .export-btn:hover {
+            background: #218838;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                max-height: none;
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .content-area {
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .price-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ V2G Fleet Savings Calculator</h1>
+            <p>Calculate monthly savings for last-mile delivery fleet with Vehicle-to-Grid services</p>
+            <a href="index.html" class="nav-link">📚 Back to Energy Research</a>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <form id="calculatorForm">
+                    <div class="form-section">
+                        <h3>Fleet Parameters</h3>
+                        <div class="form-group">
+                            <label for="numVehicles">Number of Vehicles</label>
+                            <input type="number" id="numVehicles" value="10" min="1" max="1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="batteryCapacity">Battery Capacity (kWh)</label>
+                            <input type="number" id="batteryCapacity" value="85" min="10" max="500" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxPower">Max Charge/Discharge Power (kW)</label>
+                            <input type="number" id="maxPower" value="10" min="1" max="350" step="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="efficiency">Round-trip Efficiency (%)</label>
+                            <input type="number" id="efficiency" value="90" min="50" max="100" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="degradationCost">Battery Degradation Cost (€/kWh cycled)</label>
+                            <input type="number" id="degradationCost" value="0.02" min="0" max="1" step="0.001">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Schedule & SoC</h3>
+                        <div class="form-group">
+                            <label for="arrivalTime">Arrival Time at Depot</label>
+                            <input type="time" id="arrivalTime" value="18:00">
+                        </div>
+                        <div class="form-group">
+                            <label for="departureTime">Departure Time from Depot</label>
+                            <input type="time" id="departureTime" value="07:00">
+                        </div>
+                        <div class="form-group">
+                            <label for="arrivalSoc">Arrival SoC (%)</label>
+                            <input type="number" id="arrivalSoc" value="40" min="0" max="100" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="departureSoc">Departure SoC (%)</label>
+                            <input type="number" id="departureSoc" value="85" min="0" max="100" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="minSoc">Minimum SoC (%)</label>
+                            <input type="number" id="minSoc" value="10" min="0" max="100" step="1">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Simulation Period</h3>
+                        <div class="form-group">
+                            <label for="numDays">Number of Days</label>
+                            <input type="number" id="numDays" value="30" min="1" max="365" step="1">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Hourly Electricity Prices (€/MWh)</h3>
+                        <div class="price-grid" id="priceGrid">
+                            <!-- Price inputs will be generated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="calculateBtn">Calculate Savings</button>
+                </form>
+            </div>
+
+            <div class="content-area">
+                <div id="loadingMessage" class="loading" style="display: none;">
+                    Calculating optimal charging strategy...
+                </div>
+
+                <div id="resultsContainer" class="results-container">
+                    <div class="summary-cards">
+                        <div class="summary-card green">
+                            <h4>Monthly Savings</h4>
+                            <div class="value" id="monthlySavings">€0.00</div>
+                            <div class="subtext">Total fleet savings vs. immediate charging</div>
+                        </div>
+                        <div class="summary-card blue">
+                            <h4 id="strategyCostLabel">V2G Net Cost</h4>
+                            <div class="value" id="v2gCost">€0.00</div>
+                            <div class="subtext" id="strategyCostSubtext">Revenue - Charging cost</div>
+                        </div>
+                        <div class="summary-card red">
+                            <h4>Immediate Charging Cost</h4>
+                            <div class="value" id="smartCost">€0.00</div>
+                            <div class="subtext">Manual charging (plugged immediately)</div>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Savings per Vehicle</h4>
+                            <div class="value" id="savingsPerVehicle">€0.00</div>
+                            <div class="subtext">Average monthly per vehicle</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>💰 Hourly Electricity Prices</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="priceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>📊 Monthly Cost Comparison (Strategy vs Immediate Charging)</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>⚡ Daily Power Schedule</h3>
+                        <div class="day-selector">
+                            <label for="daySelector">Select Day:</label>
+                            <select id="daySelector">
+                                <option value="0">Day 1 (Weekday)</option>
+                            </select>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="powerChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>🔋 State of Charge Evolution</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="socChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>📈 Daily Breakdown</h3>
+                        <div class="table-container">
+                            <table id="dailyBreakdownTable">
+                                <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Type</th>
+                                        <th>Energy Charged (kWh)</th>
+                                        <th>Energy Discharged (kWh)</th>
+                                        <th>Strategy Cost (€)</th>
+                                        <th>Immediate Cost (€)</th>
+                                        <th>Savings (€)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dailyBreakdownBody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="export-btn" id="exportBtn">📥 Export to CSV</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Default hourly prices
+        const defaultPrices = {
+            0: 127.32, 1: 127.32, 2: 127.32, 3: 124.85, 4: 125.44, 5: 133.95,
+            6: 149.15, 7: 147.66, 8: 138.30, 9: 118.03, 10: 99.63, 11: 86.83,
+            12: 66.69, 13: 43.63, 14: 38.00, 15: 51.04, 16: 81.01, 17: 108.41,
+            18: 130.41, 19: 166.50, 20: 210.70, 21: 213.31, 22: 183.97, 23: 162.75
+        };
+
+        let charts = {};
+        let simulationResults = null;
+
+        // Initialize price input grid
+        function initializePriceInputs() {
+            const priceGrid = document.getElementById('priceGrid');
+            priceGrid.innerHTML = '';
+            
+            for (let hour = 0; hour < 24; hour++) {
+                const group = document.createElement('div');
+                group.className = 'price-input-group';
+                group.innerHTML = `
+                    <label>${hour}:00</label>
+                    <input type="number" id="price_${hour}" value="${defaultPrices[hour]}" step="0.01" min="0">
+                `;
+                priceGrid.appendChild(group);
+            }
+        }
+
+        // Get parameters from form
+        function getParameters() {
+            const arrivalTimeStr = document.getElementById('arrivalTime').value;
+            const departureTimeStr = document.getElementById('departureTime').value;
+            
+            const arrivalHour = parseInt(arrivalTimeStr.split(':')[0]);
+            const departureHour = parseInt(departureTimeStr.split(':')[0]);
+
+            const prices = {};
+            for (let hour = 0; hour < 24; hour++) {
+                prices[hour] = parseFloat(document.getElementById(`price_${hour}`).value);
+            }
+
+            return {
+                v2gEnabled: true,
+                numVehicles: parseInt(document.getElementById('numVehicles').value),
+                batteryCapacity: parseFloat(document.getElementById('batteryCapacity').value),
+                maxPower: parseFloat(document.getElementById('maxPower').value),
+                efficiency: parseFloat(document.getElementById('efficiency').value) / 100,
+                degradationCostPerKwh: parseFloat(document.getElementById('degradationCost').value),
+                arrivalHour: arrivalHour,
+                departureHour: departureHour,
+                arrivalSoc: parseFloat(document.getElementById('arrivalSoc').value) / 100,
+                departureSoc: parseFloat(document.getElementById('departureSoc').value) / 100,
+                minSoc: parseFloat(document.getElementById('minSoc').value) / 100,
+                numDays: parseInt(document.getElementById('numDays').value),
+                prices: prices
+            };
+        }
+
+        // Validate parameters
+        function validateParameters(params) {
+            const warnings = [];
+
+            if (params.departureSoc <= params.arrivalSoc) {
+                warnings.push('Departure SoC must be greater than Arrival SoC');
+            }
+
+            if (params.minSoc >= params.arrivalSoc) {
+                warnings.push('Minimum SoC must be less than Arrival SoC');
+            }
+
+            if (params.arrivalHour === params.departureHour) {
+                warnings.push('Arrival and Departure times cannot be the same');
+            }
+
+            if (!(params.efficiency > 0 && params.efficiency <= 1)) {
+                warnings.push('Round-trip efficiency must be between 1% and 100%');
+            }
+
+            if (!(params.degradationCostPerKwh >= 0)) {
+                warnings.push('Battery degradation cost cannot be negative');
+            }
+
+            return warnings;
+        }
+
+        // Calculate median of array
+        function calculateMedian(arr) {
+            const sorted = [...arr].sort((a, b) => a - b);
+            const mid = Math.floor(sorted.length / 2);
+            return sorted.length % 2 === 0 
+                ? (sorted[mid - 1] + sorted[mid]) / 2 
+                : sorted[mid];
+        }
+
+        // Build the list of hours (0-23, repeated) spanning a parked session.
+        // Weekday: arrival to departure next morning (e.g., 18:00 to 07:00).
+        // Weekend: Friday arrival through Monday departure (three midnights).
+        function buildSessionHours(params, isWeekend) {
+            const hours = [];
+            if (!isWeekend) {
+                for (let h = params.arrivalHour; h < 24; h++) hours.push(h);
+                for (let h = 0; h < params.departureHour; h++) hours.push(h);
+            } else {
+                for (let h = params.arrivalHour; h < 24; h++) hours.push(h);
+                for (let h = 0; h < 24; h++) hours.push(h);
+                for (let h = 0; h < 24; h++) hours.push(h);
+                for (let h = 0; h < params.departureHour; h++) hours.push(h);
+            }
+            return hours;
+        }
+
+        // Turn a finished powerSchedule into the full result object: SoC trace,
+        // energy totals, and cost/revenue/netCost. Round-trip efficiency is
+        // applied to exported (discharged) energy, and a per-kWh-cycled
+        // degradation cost is applied to ALL charged + discharged energy so
+        // that every strategy (immediate, smart-charging, V2G) is put on the
+        // same accounting basis and savings reflect price-timing and V2G
+        // export revenue only, not an accounting artifact.
+        function buildScheduleResult(hours, powerSchedule, params) {
+            let currentSoc = params.arrivalSoc;
+            const socSchedule = [];
+            for (let i = 0; i < hours.length; i++) {
+                currentSoc += powerSchedule[i] / params.batteryCapacity;
+                socSchedule.push(currentSoc * 100);
+            }
+
+            let totalCharged = 0;
+            let totalDischarged = 0;
+            let cost = 0;
+            let revenue = 0;
+
+            for (let i = 0; i < hours.length; i++) {
+                const pricePerKwh = params.prices[hours[i]] / 1000;
+                if (powerSchedule[i] > 0) {
+                    totalCharged += powerSchedule[i];
+                    cost += powerSchedule[i] * pricePerKwh;
+                } else if (powerSchedule[i] < 0) {
+                    const dischargeAmount = -powerSchedule[i];
+                    totalDischarged += dischargeAmount;
+                    // Only a fraction of exported energy is monetized due to
+                    // inverter/round-trip losses.
+                    revenue += dischargeAmount * params.efficiency * pricePerKwh;
+                }
+            }
+
+            const degradationCost = (totalCharged + totalDischarged) * params.degradationCostPerKwh;
+            const netCost = cost - revenue + degradationCost;
+
+            return {
+                hours: hours,
+                powerSchedule: powerSchedule,
+                socSchedule: socSchedule,
+                totalCharged: totalCharged,
+                totalDischarged: totalDischarged,
+                cost: cost,
+                revenue: revenue,
+                degradationCost: degradationCost,
+                netCost: netCost,
+                finalSoc: socSchedule[socSchedule.length - 1]
+            };
+        }
+
+        // Calculate optimal V2G schedule for a day.
+        // Phase 1: discharge at the highest-priced above-median hours first,
+        //   limited only by available headroom above minSoc at that point
+        //   (a partial discharge is used instead of skipping the hour).
+        // Phase 2: charge at the cheapest below-median hours first, to work
+        //   back toward departureSoc.
+        // Phase 3: if departureSoc still isn't reached, top up using
+        //   whatever hours remain, cheapest first, regardless of the median.
+        // The same allocation logic is used for weekday and weekend sessions;
+        // only the length of the parked window differs.
+        function calculateV2GSchedule(params, isWeekend = false) {
+            const hours = buildSessionHours(params, isWeekend);
+            const prices = hours.map(h => params.prices[h]);
+            const medianPrice = calculateMedian(prices);
+            const slots = hours.map((h, i) => ({ index: i, hour: h, price: prices[i] }));
+            const powerSchedule = new Array(hours.length).fill(0);
+            const EPS = 0.01; // kWh; ignore dust allocations
+
+            let currentSoc = params.arrivalSoc;
+
+            const dischargeCandidates = slots
+                .filter(s => s.price >= medianPrice)
+                .sort((a, b) => b.price - a.price);
+
+            for (const slot of dischargeCandidates) {
+                const headroom = (currentSoc - params.minSoc) * params.batteryCapacity;
+                const dischargeAmount = Math.min(params.maxPower, headroom);
+                if (dischargeAmount > EPS) {
+                    powerSchedule[slot.index] = -dischargeAmount;
+                    currentSoc -= dischargeAmount / params.batteryCapacity;
+                }
+            }
+
+            let remainingCharge = Math.max(0, (params.departureSoc - currentSoc) * params.batteryCapacity);
+
+            const chargeCandidates = slots
+                .filter(s => powerSchedule[s.index] === 0 && s.price < medianPrice)
+                .sort((a, b) => a.price - b.price);
+
+            for (const slot of chargeCandidates) {
+                if (remainingCharge <= EPS) break;
+                const chargeAmount = Math.min(params.maxPower, remainingCharge);
+                powerSchedule[slot.index] = chargeAmount;
+                currentSoc += chargeAmount / params.batteryCapacity;
+                remainingCharge -= chargeAmount;
+            }
+
+            if (remainingCharge > EPS) {
+                const topUpCandidates = slots
+                    .filter(s => powerSchedule[s.index] === 0)
+                    .sort((a, b) => a.price - b.price);
+
+                for (const slot of topUpCandidates) {
+                    if (remainingCharge <= EPS) break;
+                    const chargeAmount = Math.min(params.maxPower, remainingCharge);
+                    powerSchedule[slot.index] = chargeAmount;
+                    currentSoc += chargeAmount / params.batteryCapacity;
+                    remainingCharge -= chargeAmount;
+                }
+            }
+
+            return buildScheduleResult(hours, powerSchedule, params);
+        }
+
+        // Price-optimized charging with NO V2G export: charges only, at the
+        // cheapest available hours first, until departureSoc is reached.
+        // This is what "V2G disabled" is compared against V2G-enabled with —
+        // a fleet operator who times charging around price but never
+        // discharges — instead of comparing immediate charging to itself.
+        function calculateSmartChargingSchedule(params, isWeekend = false) {
+            const hours = buildSessionHours(params, isWeekend);
+            const slots = hours.map((h, i) => ({ index: i, hour: h, price: params.prices[h] }));
+            const powerSchedule = new Array(hours.length).fill(0);
+
+            let remainingCharge = Math.max(0, (params.departureSoc - params.arrivalSoc) * params.batteryCapacity);
+
+            const sortedByPrice = [...slots].sort((a, b) => a.price - b.price);
+            for (const slot of sortedByPrice) {
+                if (remainingCharge <= 0.01) break;
+                const chargeAmount = Math.min(params.maxPower, remainingCharge);
+                powerSchedule[slot.index] = chargeAmount;
+                remainingCharge -= chargeAmount;
+            }
+
+            return buildScheduleResult(hours, powerSchedule, params);
+        }
+
+        // Calculate immediate/manual charging schedule: plug in on arrival
+        // and charge at max power, with no regard for price. This is the
+        // baseline every strategy is compared against.
+        function calculateImmediateChargingSchedule(params, isWeekend = false) {
+            const hours = buildSessionHours(params, isWeekend);
+            const powerSchedule = new Array(hours.length).fill(0);
+            let remainingCharge = Math.max(0, (params.departureSoc - params.arrivalSoc) * params.batteryCapacity);
+
+            for (let i = 0; i < hours.length && remainingCharge > 0.01; i++) {
+                const chargeAmount = Math.min(params.maxPower, remainingCharge);
+                powerSchedule[i] = chargeAmount;
+                remainingCharge -= chargeAmount;
+            }
+
+            return buildScheduleResult(hours, powerSchedule, params);
+        }
+
+        // Run monthly simulation
+        function runMonthlySimulation(params) {
+            const dailyResults = [];
+            let totalStrategyCost = 0;
+            let totalImmediateCost = 0;
+
+            for (let day = 0; day < params.numDays; day++) {
+                const dayOfWeek = day % 7;
+                const isWeekend = (dayOfWeek === 5 || dayOfWeek === 6);
+
+                const strategyResult = params.v2gEnabled
+                    ? calculateV2GSchedule(params, isWeekend)
+                    : calculateSmartChargingSchedule(params, isWeekend);
+
+                const immediateResult = calculateImmediateChargingSchedule(params, isWeekend);
+
+                dailyResults.push({
+                    day: day + 1,
+                    isWeekend: isWeekend,
+                    strategy: strategyResult,
+                    immediate: immediateResult,
+                    savings: immediateResult.netCost - strategyResult.netCost
+                });
+
+                totalStrategyCost += strategyResult.netCost;
+                totalImmediateCost += immediateResult.netCost;
+            }
+
+            totalStrategyCost *= params.numVehicles;
+            totalImmediateCost *= params.numVehicles;
+
+            return {
+                dailyResults: dailyResults,
+                totalV2GCost: totalStrategyCost,
+                totalSmartCost: totalImmediateCost,
+                totalSavings: totalImmediateCost - totalStrategyCost,
+                savingsPerVehicle: (totalImmediateCost - totalStrategyCost) / params.numVehicles
+            };
+        }
+
+        // Update summary cards
+        function updateSummaryCards(results, params) {
+            document.getElementById('monthlySavings').textContent = 
+                `€${results.totalSavings.toFixed(2)}`;
+            document.getElementById('v2gCost').textContent = 
+                `€${results.totalV2GCost.toFixed(2)}`;
+            document.getElementById('smartCost').textContent = 
+                `€${results.totalSmartCost.toFixed(2)}`;
+            document.getElementById('savingsPerVehicle').textContent = 
+                `€${results.savingsPerVehicle.toFixed(2)}`;
+
+            const strategyLabel = document.getElementById('strategyCostLabel');
+            const strategySubtext = document.getElementById('strategyCostSubtext');
+            strategyLabel.textContent = 'V2G Net Cost';
+            strategySubtext.textContent = 'Charging cost − export revenue + degradation';
+        }
+
+        // Create/update price chart
+        function updatePriceChart(params) {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            
+            if (charts.priceChart) {
+                charts.priceChart.destroy();
+            }
+
+            const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+            const prices = Array.from({ length: 24 }, (_, i) => params.prices[i]);
+
+            charts.priceChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'Price (€/MWh)',
+                        data: prices,
+                        backgroundColor: prices.map(p => {
+                            const max = Math.max(...prices);
+                            const min = Math.min(...prices);
+                            const ratio = (p - min) / (max - min);
+                            return `rgba(${255 * ratio}, ${100}, ${255 * (1 - ratio)}, 0.7)`;
+                        }),
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Price (€/MWh)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create/update comparison chart
+        function updateComparisonChart(results, params) {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            
+            if (charts.comparisonChart) {
+                charts.comparisonChart.destroy();
+            }
+
+            charts.comparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['V2G Strategy', 'Immediate Charging'],
+                    datasets: [{
+                        label: 'Monthly Cost (€)',
+                        data: [results.totalV2GCost, results.totalSmartCost],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(255, 99, 132, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Total Cost (€)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update power chart for selected day
+        function updatePowerChart(dayIndex, results, params) {
+            const ctx = document.getElementById('powerChart').getContext('2d');
+            
+            if (charts.powerChart) {
+                charts.powerChart.destroy();
+            }
+
+            const dayData = results.dailyResults[dayIndex];
+            const schedule = dayData.strategy;
+            const hours = schedule.hours.map((h, idx) => {
+                if (dayData.isWeekend && schedule.hours.length > 24) {
+                    const fridayHours = 24 - params.arrivalHour;
+                    const saturdayEnd = fridayHours + 24;
+                    const sundayEnd = saturdayEnd + 24;
+                    
+                    if (idx < fridayHours) return `Fri ${h}:00`;
+                    else if (idx < saturdayEnd) return `Sat ${h}:00`;
+                    else if (idx < sundayEnd) return `Sun ${h}:00`;
+                    else return `Mon ${h}:00`;
+                }
+                return `${h}:00`;
+            });
+
+            charts.powerChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'Power (kW)',
+                        data: schedule.powerSchedule,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: schedule.powerSchedule.map(p => 
+                            p > 0 ? 'rgba(75, 192, 192, 0.5)' : 'rgba(255, 99, 132, 0.5)'
+                        ),
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Power (kW)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update SoC chart for selected day
+        function updateSoCChart(dayIndex, results, params) {
+            const ctx = document.getElementById('socChart').getContext('2d');
+            
+            if (charts.socChart) {
+                charts.socChart.destroy();
+            }
+
+            const dayData = results.dailyResults[dayIndex];
+            const schedule = dayData.strategy;
+            const hours = schedule.hours.map((h, idx) => {
+                if (dayData.isWeekend && schedule.hours.length > 24) {
+                    const fridayHours = 24 - params.arrivalHour;
+                    const saturdayEnd = fridayHours + 24;
+                    const sundayEnd = saturdayEnd + 24;
+                    
+                    if (idx < fridayHours) return `Fri ${h}:00`;
+                    else if (idx < saturdayEnd) return `Sat ${h}:00`;
+                    else if (idx < sundayEnd) return `Sun ${h}:00`;
+                    else return `Mon ${h}:00`;
+                }
+                return `${h}:00`;
+            });
+
+            charts.socChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'SoC (%)',
+                        data: schedule.socSchedule,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'State of Charge (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Populate day selector dropdown
+        function populateDaySelector(results) {
+            const selector = document.getElementById('daySelector');
+            selector.innerHTML = '';
+            
+            results.dailyResults.forEach((day, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `Day ${day.day} (${day.isWeekend ? 'Weekend' : 'Weekday'})`;
+                selector.appendChild(option);
+            });
+
+            selector.addEventListener('change', (e) => {
+                const dayIndex = parseInt(e.target.value);
+                updatePowerChart(dayIndex, simulationResults, getParameters());
+                updateSoCChart(dayIndex, simulationResults, getParameters());
+            });
+        }
+
+        // Update daily breakdown table
+        function updateDailyBreakdownTable(results, params) {
+            const tbody = document.getElementById('dailyBreakdownBody');
+            tbody.innerHTML = '';
+
+            results.dailyResults.forEach(day => {
+                const row = document.createElement('tr');
+                const schedule = day.strategy;
+                
+                row.innerHTML = `
+                    <td>Day ${day.day}</td>
+                    <td>${day.isWeekend ? '🏖️ Weekend' : '📅 Weekday'}</td>
+                    <td>${schedule.totalCharged.toFixed(2)}</td>
+                    <td>${schedule.totalDischarged.toFixed(2)}</td>
+                    <td>€${schedule.netCost.toFixed(2)}</td>
+                    <td>€${day.immediate.netCost.toFixed(2)}</td>
+                    <td style="color: ${day.savings >= 0 ? 'green' : 'red'}; font-weight: bold;">
+                        €${day.savings.toFixed(2)}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Export to CSV
+        function exportToCSV(results, params) {
+            let csv = 'Day,Type,Energy Charged (kWh),Energy Discharged (kWh),Strategy Cost (€),Immediate Cost (€),Savings (€)\n';
+            
+            results.dailyResults.forEach(day => {
+                const schedule = day.strategy;
+                csv += `${day.day},${day.isWeekend ? 'Weekend' : 'Weekday'},`;
+                csv += `${schedule.totalCharged.toFixed(2)},`;
+                csv += `${schedule.totalDischarged.toFixed(2)},`;
+                csv += `${schedule.netCost.toFixed(2)},`;
+                csv += `${day.immediate.netCost.toFixed(2)},`;
+                csv += `${day.savings.toFixed(2)}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'v2g_fleet_savings.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Main calculation function
+        function calculate() {
+            const params = getParameters();
+            const warnings = validateParameters(params);
+
+            if (warnings.length > 0) {
+                alert('Validation errors:\n' + warnings.join('\n'));
+                return;
+            }
+
+            document.getElementById('loadingMessage').style.display = 'block';
+            document.getElementById('resultsContainer').classList.remove('active');
+
+            setTimeout(() => {
+                simulationResults = runMonthlySimulation(params);
+
+                updateSummaryCards(simulationResults, params);
+                updatePriceChart(params);
+                updateComparisonChart(simulationResults, params);
+                populateDaySelector(simulationResults);
+                updatePowerChart(0, simulationResults, params);
+                updateSoCChart(0, simulationResults, params);
+                updateDailyBreakdownTable(simulationResults, params);
+
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('resultsContainer').classList.add('active');
+            }, 100);
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            initializePriceInputs();
+            
+            document.getElementById('calculatorForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                calculate();
+            });
+
+            document.getElementById('exportBtn').addEventListener('click', () => {
+                if (simulationResults) {
+                    exportToCSV(simulationResults, getParameters());
+                }
+            });
+        });
+    </script>
+</body>
+</html>
